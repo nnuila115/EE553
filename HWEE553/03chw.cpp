@@ -13,46 +13,20 @@ using namespace std;
       cout << "Please enter the direction you would like MrRoboto to move (in degrees, north = 0, East = 90) and the distance in that direction." << endl;
       cout << "Enter -1 and -1 to exit." << endl;
       cin >> angle >> distance;
-      /*while(cin.fail() ||  -360 <= angle <= 360 ){
+      while(cin.fail()){
       cin.clear();
-          cout << "Error, please enter an angle between 0 and 360 and a positive distance." << endl;
+          cout << "Error, please enter an angle between 0 and 360 and a positive number for distance." << endl;
           cin.ignore(256,'\n');
           cin >> angle >> distance;
       }
-      */
       if (angle == -1 && distance == -1)
         break;
       angle = abs(angle);
       distance = abs(distance);
-      radian = angle * M_PI / 180;
-      if(0 < angle < 90){
-        px = px + cos(radian) * distance;
-        py = py + sin(radian) * distance;
-      }
-      if(90 < angle < 180){
-        px = px + sin(radian) * distance;
-        py = py - cos(radian) * distance;
-      }
-      if(180 < angle < 270){
-        px = px - sin(radian) * distance;
-        py = py - cos(radian) * distance;
-      }
-      if(270 < angle < 360){
-        px = px - cos(radian) * distance;
-        py = py + sin(radian) * distance;
-      }
-     if(angle == 0 || angle == 360){
-        py = py + distance;
-      }
-      if(angle == 90){
-        px = px + distance;
-      }
-      if(angle == 180){
-        py = py - distance;
-      }
-      if(angle == 270){
-        px = px - distance;
-      }
+      if(angle == 360)
+        angle = 0;
+      px+=distance*cos(M_PI/2-angle*M_PI/180);
+      py+=distance*sin(M_PI/2-angle*M_PI/180);
       cout << "MrRoboto is at x=" << px << " and y=" << py << endl;
       cout << '\n';
     }
