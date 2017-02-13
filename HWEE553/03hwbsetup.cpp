@@ -1,3 +1,6 @@
+/*
+Nicolas Nuila
+*/
 #include <iostream>
 #include <string>
 using namespace std;
