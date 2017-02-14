@@ -1,3 +1,7 @@
+/*
+Nicolas Nuila
+Had help from TAs with optimizing the calculations for the x and y components
+*/
 #include <iostream>
 #include <cmath>
 using namespace std;
@@ -25,8 +29,8 @@ using namespace std;
       distance = abs(distance);
       if(angle == 360)
         angle = 0;
-      px+=distance*cos(M_PI/2-angle*M_PI/180);
-      py+=distance*sin(M_PI/2-angle*M_PI/180);
+      px += distance * cos(M_PI / 2 - angle * M_PI / 180);
+      py += distance * sin(M_PI / 2 - angle * M_PI / 180);
       cout << "MrRoboto is at x=" << px << " and y=" << py << endl;
       cout << '\n';
     }
