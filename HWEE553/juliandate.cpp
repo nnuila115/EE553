@@ -14,16 +14,120 @@ https://en.wikipedia.org/wiki/Julian_day
 http://aa.usno.navy.mil/faq/docs/JD_Formula.php
 Look it up, cite it, feel free to use it.  Just make it object oriented.
  */
+#include<iostream>
+#include<cmath>
+using namespace std;
+
 
 class JulianDate {
 private:
 	double jday;
-  int year, month, day, hour, minute, second;
 
 public:
-  JulianDate(int year, int month, int day, int hour, int minute, int second) : year(year), month(month), day(day), hour(hour), minute(minute), second(second) {}
-  
+  JulianDate(int year, int month, int day, double UT, double minute, double second) : jday(jday){
+		minute += second / 60;
+		UT += minute / 60;
+		if((100 * year + month - 190002.5)>0)
+			jday -=.5;
+		else
+			jday += .5;
+		jday += 367 * year - trunc(7*(year+((month + 9) / 12)))/4 + trunc((275 * month) / 9) + day + 1721013.5 + UT/24 + .5;
+	}
+
+	JulianDate(int year, int month, int day) : jday(jday){
+		double UT = 0;
+		if((100 * year + month - 190002.5)>0)
+			jday -=.5;
+		else
+			jday += .5;
+		jday += 367 * year - trunc(7*(year+((month + 9) / 12)))/4 + trunc((275 * month) / 9) + day + 1721013.5 + UT/24 + .5;
+	}
+
+	JulianDate(double a) : jday(a){}
+
+	friend ostream& operator << (ostream& s, JulianDate d){
+		return s << d.getYear() << d.getMonth() << d.getDay() << d.getHour() << d.getMin() << d.getSec();
+	}
+
+	friend double operator - (JulianDate a, JulianDate b){
+		return (a.jday - b.jday);
+	}
+
+	friend JulianDate operator + (double a, JulianDate b){
+		return JulianDate(b.jday + a);
+	}
+/*
+INTEGER JD,YEAR,MONTH,DAY,I,J,K
+C
+    L= JD+68569
+    N= 4*L/146097
+    L= L-(146097*N+3)/4
+    I= 4000*(L+1)/1461001
+    L= L-1461*I/4+31
+    J= 80*L/2447
+    K= L-2447*J/80
+    L= J/11
+    J= J+2-12*L
+    I= 100*(N-49)+I+L
+C
+    YEAR= I
+    MONTH= J
+    DAY= K
+	*/
+	int getYear(){
+		int L= jday+68569;
+		int N= 4*L/146097;
+		L= L-(146097*N+3)/4;
+		int I= 4000*(L+1)/1461001;
+		L= L-1461*I/4+31;
+		int J= 80*L/2447;
+		int K= L-2447*J/80;
+		L= J/11;
+		J= J+2-12*L;
+		I= 100*(N-49)+I+L;
+		return I;
+	}
+	int getMonth(){
+		int L= jday+68569;
+		int N= 4*L/146097;
+		L= L-(146097*N+3)/4;
+		int I= 4000*(L+1)/1461001;
+		L= L-1461*I/4+31;
+		int J= 80*L/2447;
+		int K= L-2447*J/80;
+		L= J/11;
+		J= J+2-12*L;
+		I= 100*(N-49)+I+L;
+		return J;
+	}
+	int getDay(){
+		int L= jday+68569;
+		int N= 4*L/146097;
+		L= L-(146097*N+3)/4;
+		int I= 4000*(L+1)/1461001;
+		L= L-1461*I/4+31;
+		int J= 80*L/2447;
+		int K= L-2447*J/80;
+		L= J/11;
+		J= J+2-12*L;
+		I= 100*(N-49)+I+L;
+		return K;
+	}
+	int getHour(){
+		double dec = jday - int(jday);
+		return int(dec * 24);
+	}
+	int getMin(){
+		double dec = jday - int(jday) - getHour()/24.0;
+		return int(dec * 24 * 60);
+	}
+	int getSec(){
+		double dec = jday - int(jday) - getHour()/24.0 - getMin()/60.0;
+		return int(dec + 24 * 60 * 60);
+	}
 };
+	//JD =	367K - <(7(K+<(M+9)/12>))/4> + <(275M)/9> + I + 1721013.5 + UT/24
+//      - 0.5sign(100K+M-190002.5) + 0.5
 
 int main() {
 	const JulianDate d1(2017, 2, 13, 20, 00, 00);
