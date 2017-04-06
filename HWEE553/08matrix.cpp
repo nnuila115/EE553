@@ -1,3 +1,7 @@
+/*
+Nicolas Nuila
+EE 553 HW 8
+*/
 #include <iostream>
 using namespace std;
 
